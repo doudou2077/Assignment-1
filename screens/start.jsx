@@ -2,11 +2,13 @@ import { View, Text, TextInput, SafeAreaView, Button } from 'react-native'
 import React, { useState } from 'react'
 import Checkbox from 'expo-checkbox'
 
-export default function start() {
+export default function Start() {
     const [name, setName] = useState('')
     const [nameError, setNameError] = useState('')
     const [address, setAddress] = useState('')
     const [addressError, setAddressError] = useState('')
+    const [phone, setPhone] = useState('')
+    const [phoneError, setPhoneError] = useState('')
 
     const handleNameChange = (text) => {
         const characters = text.split('');
@@ -32,6 +34,17 @@ export default function start() {
         setAddress(email);
     };
 
+    const handlePhoneChange = (phone) => {
+        const isNumericandValidLength = phone.length === 10 && phone.split('').every(char => '0123456789'.includes(char));
+        const isValidLastCharacter = !['0', '1'].includes(phone[phone.length - 1]);
+        if (isNumericandValidLength && isValidLastCharacter) {
+            setPhoneError('');
+        } else {
+            setPhoneError('Please enter a valid phone number');
+        }
+        setPhone(phone);
+    }
+
     return (
         <SafeAreaView>
             <View>
@@ -56,7 +69,12 @@ export default function start() {
 
             <View>
                 <Text>Phone Number:</Text>
-                <TextInput />
+                <TextInput
+                    placeholder=''
+                    value={phone}
+                    onChangeText={handlePhoneChange}
+                />
+                {phoneError ? <Text>{phoneError}</Text> : null}
             </View>
 
             <View>
