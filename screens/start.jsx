@@ -25,8 +25,8 @@ export default function Start() {
     const handleEmailChange = (email) => {
         const atIndex = email.indexOf('@');
         const lastAtIndex = email.lastIndexOf('@');
-        const dotComIndex = email.lastIndexOf('.com');
-        if (atIndex === lastAtIndex && atIndex > 0 && dotComIndex > atIndex + 1 && dotComIndex === email.length - 4) {
+        const dotComIndex = email.lastIndexOf('.');
+        if (atIndex === lastAtIndex && atIndex > 0 && dotComIndex > atIndex + 1 && dotComIndex < email.length - 1) {
             setAddressError('');
         } else {
             setAddressError('Please enter a valid email address');
