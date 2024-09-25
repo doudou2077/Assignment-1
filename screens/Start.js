@@ -1,8 +1,8 @@
-import { View, Text, TextInput, SafeAreaView, Button } from 'react-native'
+import { View, Text, TextInput, SafeAreaView, Button, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Checkbox from 'expo-checkbox'
 
-export default function Start() {
+export default function Start({ onRegister }) {
     const [name, setName] = useState('')
     const [nameError, setNameError] = useState('')
     const [address, setAddress] = useState('')
@@ -54,6 +54,13 @@ export default function Start() {
         setIsChecked(false);
     }
 
+    const handleRegister = () => {
+        if (!nameError && !addressError && !phoneError && name && address && phone && isChecked) {
+            onRegister();
+        } else {
+            Alert.alert('Please fill in the form correctly')
+        }
+    }
 
     return (
         <SafeAreaView>
@@ -91,13 +98,12 @@ export default function Start() {
                 <Checkbox
                     value={isChecked}
                     onValueChange={setIsChecked}
-
                 />
             </View>
 
             <View>
                 <Button title="Reset" onPress={resetForm} />
-                <Button title="Register" disabled={!isChecked} />
+                <Button title="Register" onPress={handleRegister} disabled={!isChecked} />
             </View>
 
         </SafeAreaView>
