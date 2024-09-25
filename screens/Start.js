@@ -47,6 +47,14 @@ export default function Start() {
 
     const [isChecked, setIsChecked] = useState(false);
 
+    const resetForm = () => {
+        setName('');
+        setAddress('');
+        setPhone('');
+        setIsChecked(false);
+    }
+
+
     return (
         <SafeAreaView>
             <View>
@@ -88,7 +96,7 @@ export default function Start() {
             </View>
 
             <View>
-                <Button title="Reset" />
+                <Button title="Reset" onPress={resetForm} />
                 <Button title="Register" disabled={!isChecked} />
             </View>
 
