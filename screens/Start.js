@@ -45,6 +45,8 @@ export default function Start() {
         setPhone(phone);
     }
 
+    const [isChecked, setIsChecked] = useState(false);
+
     return (
         <SafeAreaView>
             <View>
@@ -78,12 +80,16 @@ export default function Start() {
             </View>
 
             <View>
-                <Checkbox />
+                <Checkbox
+                    value={isChecked}
+                    onValueChange={setIsChecked}
+
+                />
             </View>
 
             <View>
                 <Button title="Reset" />
-                <Button title="Register" />
+                <Button title="Register" disabled={!isChecked} />
             </View>
 
         </SafeAreaView>
