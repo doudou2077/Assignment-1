@@ -8,14 +8,24 @@ import Game from './screens/Game';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('START');
+  const [userData, setUserData] = useState({ name: '', email: '', phone: '' });
+
+  const handleRegister = (userData) => {
+    setUserData(userData);
+    setCurrentScreen('CONFIRM');
+
+  }
 
   const renderScree = () => {
     switch (currentScreen) {
       case 'START':
-        return <Start onRegister={() => setCurrentScreen('CONFIRM')} />;
+        return <Start onRegister={handleRegister} />;
       case 'CONFIRM':
-        return <Confirm onConfirm={() => setCurrentScreen('GAME')}
-          onBack={() => setCurrentScreen('START')} />;
+        return <Confirm
+          userInfo={userData}
+          onConfirm={() => setCurrentScreen('GAME')}
+          onBack={() => setCurrentScreen('START')}
+        />;
       case 'GAME':
         return <Game onEnd={() => setCurrentScreen('START')} />;
       default:
@@ -24,17 +34,11 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       {renderScree()}
       <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
