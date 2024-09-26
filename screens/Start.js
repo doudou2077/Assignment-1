@@ -51,7 +51,7 @@ export default function Start({ onRegister }) {
 
     const handleRegister = () => {
         if (!nameError && !addressError && !phoneError && name && address && phone && isChecked) {
-            onRegister();
+            onRegister({ name, address, phone });
         } else {
             Alert.alert('Please fill in the form correctly');
         }
