@@ -1,6 +1,8 @@
 import { View, Text, TextInput, SafeAreaView, Button, Alert, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import Checkbox from 'expo-checkbox';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 export default function Start({ onRegister }) {
     const [name, setName] = useState('');
@@ -56,7 +58,10 @@ export default function Start({ onRegister }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <LinearGradient
+            colors={['#4c669f', '#3b5998', '#192f6a']}
+            style={styles.container}
+        >
             <View style={styles.card}>
                 <Text style={styles.label}>Name:</Text>
                 <TextInput
@@ -99,22 +104,20 @@ export default function Start({ onRegister }) {
                     <Button title="Register" onPress={handleRegister} disabled={!isChecked} />
                 </View>
             </View>
-        </SafeAreaView>
+        </LinearGradient>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
-        backgroundColor: '#4c669f',
+        justifyContent: 'center',
     },
     card: {
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        width: '90%',
+        width: '70%',
         margin: 20,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -123,11 +126,10 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     input: {
-        borderWidth: 1,
-        borderColor: '#ddd',
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
         padding: 10,
         marginBottom: 10,
-        borderRadius: 5,
     },
     label: {
         marginBottom: 5,
