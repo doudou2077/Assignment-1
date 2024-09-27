@@ -50,7 +50,8 @@ export default function Start({ onRegister }) {
 
     const handleRegister = () => {
         if (!nameError && !addressError && !phoneError && name && address && phone && isChecked) {
-            onRegister({ name, address, phone });
+            const lastDigit = parseInt(phone[phone.length - 1], 10);
+            onRegister({ name, address, phone, lastDigit });
         } else {
             Alert.alert('Please fill in the form correctly');
         }
