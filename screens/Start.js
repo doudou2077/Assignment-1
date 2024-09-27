@@ -1,7 +1,6 @@
-import { View, Text, TextInput, SafeAreaView, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, SafeAreaView, Button, Alert, StyleSheet, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import Checkbox from 'expo-checkbox';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function Start({ onRegister }) {
@@ -58,10 +57,7 @@ export default function Start({ onRegister }) {
     };
 
     return (
-        <LinearGradient
-            colors={['#4c669f', '#3b5998', '#192f6a']}
-            style={styles.container}
-        >
+        <SafeAreaView style={styles.container}>
             <View style={styles.card}>
                 <Text style={styles.label}>Name:</Text>
                 <TextInput
@@ -104,14 +100,21 @@ export default function Start({ onRegister }) {
                     <Button title="Register" onPress={handleRegister} disabled={!isChecked} />
                 </View>
             </View>
-        </LinearGradient>
+        </SafeAreaView>
     );
 }
 
+
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
+        width: windowWidth,
+        height: windowHeight,
         justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
     },
     card: {
         backgroundColor: 'white',
