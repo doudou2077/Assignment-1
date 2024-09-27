@@ -8,12 +8,17 @@ import Game from './screens/Game';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('START');
-  const [userData, setUserData] = useState({ name: '', email: '', phone: '' });
+  const [userData, setUserData] = useState({ name: '', email: '', phone: '', lastDigit: null });
 
   const handleRegister = (userData) => {
     setUserData(userData);
     setCurrentScreen('CONFIRM');
 
+  }
+
+  const handleRestart = () => {
+    setCurrentScreen('START');
+    setUserData({ name: '', email: '', phone: '', lastDigit: null });
   }
 
   const renderScree = () => {
@@ -27,7 +32,11 @@ export default function App() {
           onBack={() => setCurrentScreen('START')}
         />;
       case 'GAME':
-        return <Game onEnd={() => setCurrentScreen('START')} />;
+        return <Game
+          lastDigit={userData.lastDigit}
+          onRestart={handleRestart}
+          onEnd={() => setCurrentScreen('START')}
+        />;
       default:
         return <Start onRegister={() => setCurrentScreen('CONFIRM')} />
     }
