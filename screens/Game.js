@@ -1,9 +1,9 @@
 import { View, Text, TextInput, Button, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 
 
-export default function Game() {
+export default function Game({ lastDigit, onRestart }) {
     const [guess, setGuess] = useState('');
     const [timer, setTimer] = useState(60);
     const [attempts, setAttempts] = useState(4);
@@ -46,22 +46,23 @@ export default function Game() {
     }
 
     return (
-        <View>
-            <Text>
+        <View style={styles.container}>
+            <Text style={styles.instruction}>
                 Guess a number between 1 & 100 that is a multiple of {lastDigit}
             </Text>
 
-            <View>
+            <View style={styles.card}>
                 {gameStarted ? (
                     <>
                         <TextInput
+                            style={styles.input}
                             onChangeText={setGuess}
                             placeholder="Enter your guess"
                             value={guess}
                             keyboardType="numeric"
                         />
                         <Text>Attempts left: {attempts}</Text>
-                        <Tetx>Timer: {timer}s</Tetx>
+                        <Text>Timer: {timer}s</Text>
                         <Button title="Use a Hint" onPress={() => { }} />
                         <Button title="Submit guess" onPress={handleGuess} />
                     </>
@@ -72,7 +73,7 @@ export default function Game() {
                 )}
             </View>
 
-            <TouchableOpacity onPress={onRestart}>
+            <TouchableOpacity onPress={onRestart} style={styles.restartButton}>
                 <Text>Restart</Text>
             </TouchableOpacity>
         </View>
@@ -80,3 +81,44 @@ export default function Game() {
 
 
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    card: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    instructions: {
+        fontSize: 16,
+        marginBottom: 20,
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        width: '100%',
+        marginBottom: 10,
+        padding: 10,
+    },
+    restartButton: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        padding: 10,
+        backgroundColor: '#ddd',
+        borderRadius: 5,
+    }
+});
