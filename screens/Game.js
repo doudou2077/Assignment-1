@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function Game({ lastDigit, onRestart }) {
+const Game = ({ lastDigit, onRestart }) => {
     const [guess, setGuess] = useState('');
     const [timer, setTimer] = useState(60);
     const [attempts, setAttempts] = useState(4);
     const [gameStarted, setGameStarted] = useState(false);
     const [correctAnswer, setCorrectAnswer] = useState(null);
+    const [hintUsed, setHintUsed] = useState(false);
+    const [hintMessage, setHintMessage] = useState('');
     const [feedback, setFeedback] = useState('');
     const [showFeedback, setShowFeedback] = useState(false);
 
@@ -14,7 +16,7 @@ export default function Game({ lastDigit, onRestart }) {
         let interval;
         if (gameStarted && timer > 0) {
             interval = setInterval(() => {
-                setTimer(prevTimer => prevTimer - 1);
+                setTimer((prevTimer) => prevTimer - 1);
             }, 1000);
         } else if (timer === 0) {
             Alert.alert("Time's up!");
@@ -23,41 +25,48 @@ export default function Game({ lastDigit, onRestart }) {
         return () => clearInterval(interval);
     }, [gameStarted, timer]);
 
+    useEffect(() => {
+        setCorrectAnswer(generateCorrectAnswer(lastDigit));
+    }, [lastDigit]);
+
     const handleStart = () => {
         setGameStarted(true);
-        setCorrectAnswer(generateCorrectAnswer(lastDigit));
     };
 
     const handleGuess = () => {
         const numericGuess = parseInt(guess, 10);
         if (!numericGuess || numericGuess < 1 || numericGuess > 100) {
-            Alert.alert('Invalid input', 'Enter a number between 1 and 100.');
+            setFeedback('Enter a number between 1 and 100.');
+            setShowFeedback(true);
             return;
         }
         if (numericGuess !== correctAnswer) {
+            const direction = numericGuess > correctAnswer ? 'lower' : 'higher';
             setAttempts(prevAttempts => {
                 if (prevAttempts <= 1) {
-                    Alert.alert('No more attempts', 'Game over!');
+                    setFeedback('No more attempts. Game over!');
+                    setShowFeedback(true);
                     onRestart();
-                    return prevAttempts;
+                } else {
+                    setFeedback(`You did not guess correct! You should guess ${direction}.`);
+                    setShowFeedback(true);
                 }
                 return prevAttempts - 1;
             });
-            setFeedback(`You should guess ${numericGuess < correctAnswer ? 'higher' : 'lower'}.`);
-            setShowFeedback(true);
         } else {
-            Alert.alert('Congratulations', 'You guessed the right number!');
+            setFeedback('Congratulations! You guessed the right number!');
+            setShowFeedback(true);
             onRestart();
         }
         setGuess('');
     };
 
-    const generateCorrectAnswer = (lastDigit) => {
-        const multiples = [];
-        for (let i = 1; i <= 100; i++) {
-            if (i % lastDigit === 0) multiples.push(i);
+    const handleHint = () => {
+        if (!hintUsed && guess) {
+            const direction = parseInt(guess) > correctAnswer ? 'Guess lower!' : 'Guess higher!';
+            setHintMessage(direction);
+            setHintUsed(true);
         }
-        return multiples[Math.floor(Math.random() * multiples.length)];
     };
 
     const handleTryAgain = () => {
@@ -68,13 +77,24 @@ export default function Game({ lastDigit, onRestart }) {
         onRestart();
     };
 
+    const generateCorrectAnswer = (lastDigit) => {
+        const multiples = Array.from({ length: 100 }, (_, i) => i + 1).filter(i => i % lastDigit === 0);
+        return multiples[Math.floor(Math.random() * multiples.length)];
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.instructions}>
                 Guess a number between 1 & 100 that is a multiple of {lastDigit}
             </Text>
 
-            {!showFeedback && (
+            {showFeedback ? (
+                <View style={styles.feedbackCard}>
+                    <Text>{feedback}</Text>
+                    <Button title="Try Again" onPress={handleTryAgain} />
+                    <Button title="End the Game" onPress={handleEndGame} />
+                </View>
+            ) : (
                 <View style={styles.card}>
                     {gameStarted ? (
                         <>
@@ -87,19 +107,13 @@ export default function Game({ lastDigit, onRestart }) {
                             />
                             <Text>Attempts left: {attempts}</Text>
                             <Text>Timer: {timer}s</Text>
-                            <Button title="Submit guess" onPress={handleGuess} disabled={!gameStarted || attempts <= 0} />
+                            {hintMessage && <Text>{hintMessage}</Text>}
+                            <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
+                            <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
                         </>
                     ) : (
                         <Button title="Start" onPress={handleStart} />
                     )}
-                </View>
-            )}
-
-            {showFeedback && (
-                <View style={styles.feedbackCard}>
-                    <Text>{feedback}</Text>
-                    <Button title="Try Again" onPress={handleTryAgain} />
-                    <Button title="End the Game" onPress={handleEndGame} />
                 </View>
             )}
 
@@ -108,7 +122,7 @@ export default function Game({ lastDigit, onRestart }) {
             </TouchableOpacity>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -130,7 +144,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     feedbackCard: {
-        backgroundColor: 'white',
+        backgroundColor: 'lightgrey',
         padding: 20,
         borderRadius: 10,
         width: '80%',
@@ -163,3 +177,5 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     }
 });
+
+export default Game;
