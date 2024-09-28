@@ -6,7 +6,7 @@ import React from 'react'
 export default function Game() {
     const [guess, setGuess] = useState('');
     const [timer, setTimer] = useState(60);
-    const [attempts, setAttemps] = useState(4);
+    const [attempts, setAttempts] = useState(4);
     const [gameStarted, setGameStarted] = useState(false);
 
     useEffect(() => {
@@ -26,6 +26,24 @@ export default function Game() {
         setGameStarted(true);
     }
 
+    const handleGuess = () => {
+        if (!guess || isNaN(guess) || guess < 1 || guess > 100) {
+            Alert.alert('Invalid input', 'Enter a number between 1 and 100.');
+            return;
+        }
+        if (parseInt(guess) % lastDigit !== 0) {
+            setAttempts(attempts - 1);
+            if (attempts <= 1) {
+                Alert.alert('No more attempts', 'Game over!');
+                onRestart();
+            } else {
+                Alert.alert('Try again', `You have ${attempts - 1} attempts left.`);
+            }
+        } else {
+            Alert.alert('Congratulations', 'You guessed the right number!');
+            onRestart();
+        }
+    }
 
     return (
         <View>

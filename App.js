@@ -21,7 +21,7 @@ export default function App() {
     setUserData({ name: '', email: '', phone: '', lastDigit: null });
   }
 
-  const renderScree = () => {
+  const renderScreen = () => {
     switch (currentScreen) {
       case 'START':
         return <Start onRegister={handleRegister} />;
@@ -35,7 +35,6 @@ export default function App() {
         return <Game
           lastDigit={userData.lastDigit}
           onRestart={handleRestart}
-          onEnd={() => setCurrentScreen('START')}
         />;
       default:
         return <Start onRegister={() => setCurrentScreen('CONFIRM')} />
@@ -44,7 +43,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {renderScree()}
+      {renderScreen()}
       <StatusBar style="auto" />
     </SafeAreaView>
   );
