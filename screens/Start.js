@@ -1,7 +1,8 @@
-import { View, Text, TextInput, SafeAreaView, Button, Alert, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import Checkbox from 'expo-checkbox';
 import GradientBackground from './GradientBackground';
+
 
 
 export default function Start({ onRegister }) {
@@ -61,6 +62,7 @@ export default function Start({ onRegister }) {
     return (
         <GradientBackground>
             <View style={styles.container}>
+                <Text style={styles.title}> WELCOME </Text>
                 <View style={styles.card}>
                     <Text style={styles.label}>Name:</Text>
                     <TextInput
@@ -114,6 +116,13 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+    title: {
+        fontVariants: 'oldstyle-nums',
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: 'lightblue',
+    },
+
     container: {
         flex: 1,
         width: windowWidth,
