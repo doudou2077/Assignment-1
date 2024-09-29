@@ -55,7 +55,7 @@ export default function Start({ onRegister }) {
             const lastDigit = parseInt(phone[phone.length - 1], 10);
             onRegister({ name, address, phone, lastDigit });
         } else {
-            Alert.alert('Please fill in the form correctly');
+            Alert.alert('Check the input values');
         }
     };
 
