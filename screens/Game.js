@@ -14,6 +14,7 @@ const Game = ({ lastDigit, onRestart }) => {
     const [showFeedback, setShowFeedback] = useState(false);
     const [hasWon, setHasWon] = useState(false);
     const [totalAttemptsUsed, setTotalAttemptsUsed] = useState(0);
+    const [endReason, setEndReason] = useState('');
 
     useEffect(() => {
         let interval;
@@ -22,8 +23,7 @@ const Game = ({ lastDigit, onRestart }) => {
                 setTimer(prevTimer => prevTimer - 1);
             }, 1000);
         } else if (timer === 0 && gameStarted) {
-            setFeedback("Time's up! Game over!");
-            setShowFeedback(true);
+            setEndReason('time');
             setGameStarted(false); // Prevent further guesses
         }
         return () => clearInterval(interval);
@@ -44,11 +44,11 @@ const Game = ({ lastDigit, onRestart }) => {
         setShowFeedback(false);   // Hide feedback
         setHintUsed(false);       // Reset hint usage
         setHintMessage('');       // Clear hint message
+        setEndReason('');
         const newAnswer = generateCorrectAnswer(lastDigit);
         setCorrectAnswer(newAnswer);
-        console.log(`New Game Started, Correct Answer: ${newAnswer}`); // For debugging
+        console.log(`New Game Started, Correct Answer: ${newAnswer}`);
     };
-
 
     const handleGuess = () => {
         const numericGuess = parseInt(guess, 10);
@@ -56,7 +56,6 @@ const Game = ({ lastDigit, onRestart }) => {
             setFeedback('Enter a number between 1 and 100.');
             setShowFeedback(true);
         } else {
-            // Always increment total attempts used on a valid guess
             setTotalAttemptsUsed(prevAttemptsUsed => prevAttemptsUsed + 1);
 
             if (numericGuess === correctAnswer) {
@@ -66,8 +65,7 @@ const Game = ({ lastDigit, onRestart }) => {
             } else {
                 setAttempts(prev => prev - 1);
                 if (attempts <= 1) {
-                    setFeedback('No more attempts. Game over!');
-                    setShowFeedback(true);
+                    setEndReason('attempts');
                     setGameStarted(false); // Prevent further guesses
                 } else {
                     setFeedback(`You did not guess correct! You should guess ${numericGuess < correctAnswer ? 'higher' : 'lower'}.`);
@@ -92,14 +90,8 @@ const Game = ({ lastDigit, onRestart }) => {
     };
 
     const handleEndGame = () => {
-        onRestart();
-        setHasWon(false);
-        setTotalAttemptsUsed(0);  // Reset the total attempts used
-        setAttempts(4);           // Reset attempts
-        setTimer(60);             // Reset timer
-        setShowFeedback(false);   // Hide feedback
-        setHintUsed(false);       // Reset hint usage
-        setHintMessage('');       // Clear hint message
+        setEndReason('manual');
+        setGameStarted(false);
     };
 
     if (hasWon) {
@@ -108,6 +100,27 @@ const Game = ({ lastDigit, onRestart }) => {
                 <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
                 <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
                 <Button title="New Game" onPress={handleStart} />
+            </View>
+        );
+    }
+
+    if (endReason) {
+        return (
+            <View style={styles.container}>
+                <View style={styles.endGameCard}>
+                    {endReason === 'manual' ? (
+                        <Text>The game is over</Text>
+                    ) : endReason === 'time' ? (
+                        <Text>You are out of time!</Text>
+                    ) : (
+                        <Text>You are out of attempts!</Text>
+                    )}
+                    <Image
+                        source={require('./unamused-face.png')}
+                        style={styles.emojiImage}
+                    />
+                    <Button title="New Game" onPress={handleStart} />
+                </View>
             </View>
         );
     }
@@ -214,4 +227,5 @@ const styles = StyleSheet.create({
 });
 
 export default Game;
+
 
