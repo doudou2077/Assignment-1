@@ -35,6 +35,7 @@ export default function App() {
         return <Game
           lastDigit={userData.lastDigit}
           onRestart={handleRestart}
+
         />;
       default:
         return <Start onRegister={() => setCurrentScreen('CONFIRM')} />
@@ -53,7 +54,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
