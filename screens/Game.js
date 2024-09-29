@@ -100,34 +100,38 @@ const Game = ({ lastDigit, onRestart }) => {
 
     if (hasWon) {
         return (
-            <View style={styles.container}>
-                <View style={styles.winGameCard}>
-                    <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
-                    <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
-                    <Button title="New Game" onPress={handleStart} />
+            <GradientBackground>
+                <View style={styles.container}>
+                    <View style={styles.winGameCard}>
+                        <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
+                        <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
+                        <Button title="New Game" onPress={handleStart} />
+                    </View>
                 </View>
-            </View>
+            </GradientBackground>
         );
     }
 
     if (endReason) {
         return (
-            <View style={styles.container}>
-                <View style={styles.endGameCard}>
-                    {endReason === 'manual' ? (
-                        <Text>The game is over</Text>
-                    ) : endReason === 'time' ? (
-                        <Text>You are out of time!</Text>
-                    ) : (
-                        <Text>You are out of attempts!</Text>
-                    )}
-                    <Image
-                        source={require('./images.jpeg')}
-                        style={styles.emojiImage}
-                    />
-                    <Button title="New Game" onPress={handleStart} />
+            <GradientBackground>
+                <View style={styles.container}>
+                    <View style={styles.endGameCard}>
+                        {endReason === 'manual' ? (
+                            <Text>The game is over</Text>
+                        ) : endReason === 'time' ? (
+                            <Text>You are out of time!</Text>
+                        ) : (
+                            <Text>You are out of attempts!</Text>
+                        )}
+                        <Image
+                            source={require('./images.jpeg')}
+                            style={styles.emojiImage}
+                        />
+                        <Button title="New Game" onPress={handleStart} />
+                    </View>
                 </View>
-            </View>
+            </GradientBackground>
         );
     }
 
