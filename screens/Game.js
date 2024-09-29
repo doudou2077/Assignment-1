@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import GradientBackground from './GradientBackground';
 
 const Game = ({ lastDigit, onRestart }) => {
     const [guess, setGuess] = useState('');
@@ -100,9 +101,11 @@ const Game = ({ lastDigit, onRestart }) => {
     if (hasWon) {
         return (
             <View style={styles.container}>
-                <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
-                <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
-                <Button title="New Game" onPress={handleStart} />
+                <View style={styles.winGameCard}>
+                    <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
+                    <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
+                    <Button title="New Game" onPress={handleStart} />
+                </View>
             </View>
         );
     }
@@ -119,7 +122,7 @@ const Game = ({ lastDigit, onRestart }) => {
                         <Text>You are out of attempts!</Text>
                     )}
                     <Image
-                        source={require('./unamused-face.png')}
+                        source={require('./images.jpeg')}
                         style={styles.emojiImage}
                     />
                     <Button title="New Game" onPress={handleStart} />
@@ -129,41 +132,43 @@ const Game = ({ lastDigit, onRestart }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.instructions}>Guess a number between 1 & 100 that is a multiple of {lastDigit}</Text>
-            {!showFeedback ? (
-                <View style={styles.card}>
-                    {!gameStarted ? (
-                        <Button title="Start Game" onPress={handleStart} />
-                    ) : (
-                        <>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={setGuess}
-                                placeholder="Enter your guess"
-                                value={guess}
-                                keyboardType="numeric"
-                            />
-                            <Text>Attempts left: {attempts}</Text>
-                            <Text>Timer: {timer}s</Text>
-                            {hintMessage && <Text style={styles.hintMessage}>{hintMessage}</Text>}
-                            <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
-                            <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
-                        </>
-                    )}
-                </View>
-            ) : (
-                <View style={styles.feedbackCard}>
-                    <Text>{feedback}</Text>
-                    <Button title="Try Again" onPress={() => setShowFeedback(false)} />
-                    <Button title="End the Game" onPress={handleEndGame} />
-                </View>
-            )}
+        <GradientBackground>
+            <View style={styles.container}>
+                {!showFeedback ? (
+                    <View style={styles.card}>
+                        <Text style={styles.instructions}>Guess a number between 1 & 100 that is a multiple of {lastDigit}</Text>
+                        {!gameStarted ? (
+                            <Button title="Start Game" onPress={handleStart} />
+                        ) : (
+                            <>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={setGuess}
+                                    placeholder="Enter your guess"
+                                    value={guess}
+                                    keyboardType="numeric"
+                                />
+                                <Text>Attempts left: {attempts}</Text>
+                                <Text>Timer: {timer}s</Text>
+                                {hintMessage && <Text style={styles.hintMessage}>{hintMessage}</Text>}
+                                <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
+                                <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
+                            </>
+                        )}
+                    </View>
+                ) : (
+                    <View style={styles.feedbackCard}>
+                        <Text>{feedback}</Text>
+                        <Button title="Try Again" onPress={() => setShowFeedback(false)} />
+                        <Button title="End the Game" onPress={handleEndGame} />
+                    </View>
+                )}
 
-            <TouchableOpacity onPress={onRestart} style={styles.restartButton}>
-                <Text>Restart</Text>
-            </TouchableOpacity>
-        </View>
+                <TouchableOpacity onPress={onRestart} style={styles.restartButton}>
+                    <Text>Restart</Text>
+                </TouchableOpacity>
+            </View>
+        </GradientBackground>
     );
 };
 
@@ -174,6 +179,34 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
     },
+    winGameCard: {
+        backgroundColor: '#99ccff',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+
+    },
+
+    endGameCard: {
+        backgroundColor: 'black',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+
+
     card: {
         backgroundColor: 'white',
         padding: 20,
@@ -205,8 +238,8 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
         width: '100%',
         marginBottom: 10,
         padding: 10,
