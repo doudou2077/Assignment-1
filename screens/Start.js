@@ -1,6 +1,7 @@
 import { View, Text, TextInput, SafeAreaView, Button, Alert, StyleSheet, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import Checkbox from 'expo-checkbox';
+import GradientBackground from './GradientBackground';
 
 
 export default function Start({ onRegister }) {
@@ -58,50 +59,53 @@ export default function Start({ onRegister }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.card}>
-                <Text style={styles.label}>Name:</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter your name"
-                    value={name}
-                    onChangeText={handleNameChange}
-                />
-                {nameError ? <Text style={styles.error}>{nameError}</Text> : null}
-
-                <Text style={styles.label}>Email Address:</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter your email"
-                    value={address}
-                    onChangeText={handleEmailChange}
-                />
-                {addressError ? <Text style={styles.error}>{addressError}</Text> : null}
-
-                <Text style={styles.label}>Phone Number:</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter your phone number"
-                    value={phone}
-                    onChangeText={handlePhoneChange}
-                />
-                {phoneError ? <Text style={styles.error}>{phoneError}</Text> : null}
-
-                <View style={styles.checkboxContainer}>
-                    <Checkbox
-                        value={isChecked}
-                        onValueChange={setIsChecked}
-                        style={styles.checkbox}
+        <GradientBackground>
+            <View style={styles.container}>
+                <View style={styles.card}>
+                    <Text style={styles.label}>Name:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your name"
+                        value={name}
+                        onChangeText={handleNameChange}
                     />
-                    <Text style={styles.label}>I am not a robot</Text>
-                </View>
+                    {nameError ? <Text style={styles.error}>{nameError}</Text> : null}
 
-                <View style={styles.buttonContainer}>
-                    <Button title="Reset" onPress={resetForm} />
-                    <Button title="Register" onPress={handleRegister} disabled={!isChecked} />
+                    <Text style={styles.label}>Email Address:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your email"
+                        value={address}
+                        onChangeText={handleEmailChange}
+                    />
+                    {addressError ? <Text style={styles.error}>{addressError}</Text> : null}
+
+                    <Text style={styles.label}>Phone Number:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your phone number"
+                        value={phone}
+                        onChangeText={handlePhoneChange}
+                    />
+                    {phoneError ? <Text style={styles.error}>{phoneError}</Text> : null}
+
+                    <View style={styles.checkboxContainer}>
+                        <Checkbox
+                            value={isChecked}
+                            onValueChange={setIsChecked}
+                            style={styles.checkbox}
+                        />
+                        <Text style={styles.label}>I am not a robot</Text>
+                    </View>
+
+                    <View style={styles.buttonContainer}>
+                        <Button title="Reset" onPress={resetForm} />
+                        <Button title="Register" onPress={handleRegister} disabled={!isChecked} />
+                    </View>
                 </View>
             </View>
-        </SafeAreaView>
+        </GradientBackground>
+
     );
 }
 
@@ -111,11 +115,11 @@ const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         width: windowWidth,
         height: windowHeight,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
     },
     card: {
         backgroundColor: 'white',
