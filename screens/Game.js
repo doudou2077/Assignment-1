@@ -134,39 +134,40 @@ const Game = ({ lastDigit, onRestart }) => {
     return (
         <GradientBackground>
             <View style={styles.container}>
-                {!showFeedback ? (
-                    <View style={styles.card}>
-                        <Text style={styles.instructions}>Guess a number between 1 & 100 that is a multiple of {lastDigit}</Text>
-                        {!gameStarted ? (
-                            <Button title="Start Game" onPress={handleStart} />
-                        ) : (
-                            <>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={setGuess}
-                                    placeholder="Enter your guess"
-                                    value={guess}
-                                    keyboardType="numeric"
-                                />
-                                <Text>Attempts left: {attempts}</Text>
-                                <Text>Timer: {timer}s</Text>
-                                {hintMessage && <Text style={styles.hintMessage}>{hintMessage}</Text>}
-                                <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
-                                <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
-                            </>
-                        )}
-                    </View>
-                ) : (
-                    <View style={styles.feedbackCard}>
-                        <Text>{feedback}</Text>
-                        <Button title="Try Again" onPress={() => setShowFeedback(false)} />
-                        <Button title="End the Game" onPress={handleEndGame} />
-                    </View>
-                )}
-
                 <TouchableOpacity onPress={onRestart} style={styles.restartButton}>
                     <Text>Restart</Text>
                 </TouchableOpacity>
+                <View style={styles.cardContainer}>
+                    {!showFeedback ? (
+                        <View style={styles.card}>
+                            <Text style={styles.instructions}>Guess a number between 1 & 100 that is a multiple of {lastDigit}</Text>
+                            {!gameStarted ? (
+                                <Button title="Start Game" onPress={handleStart} />
+                            ) : (
+                                <>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={setGuess}
+                                        placeholder="Enter your guess"
+                                        value={guess}
+                                        keyboardType="numeric"
+                                    />
+                                    <Text>Attempts left: {attempts}</Text>
+                                    <Text>Timer: {timer}s</Text>
+                                    {hintMessage && <Text style={styles.hintMessage}>{hintMessage}</Text>}
+                                    <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
+                                    <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
+                                </>
+                            )}
+                        </View>
+                    ) : (
+                        <View style={styles.feedbackCard}>
+                            <Text>{feedback}</Text>
+                            <Button title="Try Again" onPress={() => setShowFeedback(false)} />
+                            <Button title="End the Game" onPress={handleEndGame} />
+                        </View>
+                    )}
+                </View>
             </View>
         </GradientBackground>
     );
@@ -178,7 +179,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        position: 'relative',
     },
+
+    cardContainer: {
+        width: '100%',
+        position: 'relative',
+        paddingTop: 40,
+        alignItems: 'center',
+    },
+
     winGameCard: {
         backgroundColor: '#99ccff',
         padding: 20,
@@ -244,14 +254,17 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         padding: 10,
     },
+
     restartButton: {
         position: 'absolute',
-        top: 20,
-        right: 20,
+        top: 300,
+        right: '10%',
         padding: 10,
         backgroundColor: '#ddd',
         borderRadius: 5,
+        zIndex: 10,
     },
+
     image: {
         width: 100,
         height: 100,
