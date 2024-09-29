@@ -1,55 +1,56 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import Start from './screens/Start';
-import Confirm from './screens/Confirm';
+import ConfirmModal from './screens/Confirm';
 import Game from './screens/Game';
 
-
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('START');
   const [userData, setUserData] = useState({ name: '', email: '', phone: '', lastDigit: null });
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
 
   const handleRegister = (userData) => {
     setUserData(userData);
-    setCurrentScreen('CONFIRM');
+    setIsConfirmModalVisible(true);
+  }
 
+  const handleConfirm = () => {
+    setIsConfirmModalVisible(false);
+    setIsGameStarted(true);
+  }
+
+  const handleBack = () => {
+    setIsConfirmModalVisible(false);
   }
 
   const handleRestart = () => {
-    setCurrentScreen('START');
+    setIsGameStarted(false);
     setUserData({ name: '', email: '', phone: '', lastDigit: null });
   }
 
-  const renderScreen = () => {
-    switch (currentScreen) {
-      case 'START':
-        return <Start onRegister={handleRegister} />;
-      case 'CONFIRM':
-        return <Confirm
-          userInfo={userData}
-          onConfirm={() => setCurrentScreen('GAME')}
-          onBack={() => setCurrentScreen('START')}
-        />;
-      case 'GAME':
-        return <Game
+  return (
+    <View style={styles.container}>
+      {!isGameStarted ? (
+        <>
+          <Start onRegister={handleRegister} />
+          <ConfirmModal
+            visible={isConfirmModalVisible}
+            userInfo={userData}
+            onConfirm={handleConfirm}
+            onBack={handleBack}
+          />
+        </>
+      ) : (
+        <Game
           lastDigit={userData.lastDigit}
           onRestart={handleRestart}
-
-        />;
-      default:
-        return <Start onRegister={() => setCurrentScreen('CONFIRM')} />
-    }
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      {renderScreen()}
+        />
+      )}
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
