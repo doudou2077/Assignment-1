@@ -1,5 +1,8 @@
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import React from 'react'
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width, height } = Dimensions.get('window');
 
 export default function Confirm({ visible, onBack, onConfirm, userInfo }) {
     return (
@@ -8,34 +11,46 @@ export default function Confirm({ visible, onBack, onConfirm, userInfo }) {
             transparent={true}
             visible={visible}
         >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <View style={styles.userInfoSection}>
-                        <Text style={styles.userInfo}>Name: {userInfo.name}</Text>
-                        <Text style={styles.userInfo}>Email: {userInfo.address}</Text>
-                        <Text style={styles.userInfo}>Phone Number: {userInfo.phone}</Text>
-                    </View>
+            <LinearGradient
+                colors={['rgba(76, 102, 159, 0.9)', 'rgba(59, 89, 152, 0.9)', 'rgba(25, 47, 106, 0.9)']}
+                style={styles.gradientBackground}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={styles.userInfoSection}>
+                            <Text style={styles.userInfo}>Name: {userInfo.name}</Text>
+                            <Text style={styles.userInfo}>Email: {userInfo.address}</Text>
+                            <Text style={styles.userInfo}>Phone Number: {userInfo.phone}</Text>
+                        </View>
 
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={onBack} style={[styles.button, styles.buttonClose]}>
-                            <Text style={styles.buttonText}>Go Back</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={onConfirm} style={styles.button}>
-                            <Text style={styles.buttonText}>Continue</Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity onPress={onBack} style={[styles.button, styles.buttonClose]}>
+                                <Text style={styles.buttonText}>Go Back</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={onConfirm} style={styles.button}>
+                                <Text style={styles.buttonText}>Continue</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </LinearGradient>
         </Modal>
     )
 }
 
 const styles = StyleSheet.create({
+    gradientBackground: {
+        flex: 1,
+        width: width,
+        height: height,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
     modalView: {
         margin: 20,
@@ -48,7 +63,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        width: '80%', // Adjust width as necessary
+        width: '80%',
     },
     header: {
         fontSize: 24,
