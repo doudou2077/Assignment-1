@@ -98,42 +98,6 @@ const Game = ({ lastDigit, onRestart }) => {
         setGameStarted(false);
     };
 
-    if (hasWon) {
-        return (
-            <GradientBackground>
-                <View style={styles.container}>
-                    <View style={styles.winGameCard}>
-                        <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
-                        <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
-                        <Button title="New Game" onPress={handleStart} />
-                    </View>
-                </View>
-            </GradientBackground>
-        );
-    }
-
-    if (endReason) {
-        return (
-            <GradientBackground>
-                <View style={styles.container}>
-                    <View style={styles.endGameCard}>
-                        {endReason === 'manual' ? (
-                            <Text>The game is over</Text>
-                        ) : endReason === 'time' ? (
-                            <Text>You are out of time!</Text>
-                        ) : (
-                            <Text>You are out of attempts!</Text>
-                        )}
-                        <Image
-                            source={require('./images.jpeg')}
-                            style={styles.emojiImage}
-                        />
-                        <Button title="New Game" onPress={handleStart} />
-                    </View>
-                </View>
-            </GradientBackground>
-        );
-    }
 
     return (
         <GradientBackground>
@@ -141,36 +105,58 @@ const Game = ({ lastDigit, onRestart }) => {
                 <TouchableOpacity onPress={onRestart} style={styles.restartButton}>
                     <Text>Restart</Text>
                 </TouchableOpacity>
+
                 <View style={styles.cardContainer}>
-                    {!showFeedback ? (
-                        <View style={styles.card}>
-                            <Text style={styles.instructions}>Guess a number between 1 & 100 that is a multiple of {lastDigit}</Text>
-                            {!gameStarted ? (
-                                <Button title="Start Game" onPress={handleStart} />
-                            ) : (
-                                <>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={setGuess}
-                                        placeholder="Enter your guess"
-                                        value={guess}
-                                        keyboardType="numeric"
-                                    />
-                                    <Text>Attempts left: {attempts}</Text>
-                                    <Text>Timer: {timer}s</Text>
-                                    {hintMessage && <Text style={styles.hintMessage}>{hintMessage}</Text>}
-                                    <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
-                                    <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
-                                </>
-                            )}
+                    {hasWon ? (
+                        <View style={styles.winGameCard}>
+                            <Text>{`Congratulations! You guessed the number in ${totalAttemptsUsed} attempts.`}</Text>
+                            <Image source={{ uri: `https://picsum.photos/id/${correctAnswer}/100/100` }} style={styles.image} />
+                            <Button title="New Game" onPress={handleStart} />
                         </View>
-                    ) : (
-                        <View style={styles.feedbackCard}>
-                            <Text>{feedback}</Text>
-                            <Button title="Try Again" onPress={() => setShowFeedback(false)} />
-                            <Button title="End the Game" onPress={handleEndGame} />
-                        </View>
-                    )}
+                    ) : endReason ? (<View style={styles.endGameCard}>
+                        {endReason === 'manual' ? (
+                            <Text style={styles.endGameCardText}>The game is over</Text>
+                        ) : endReason === 'time' ? (
+                            <Text style={styles.endGameCardText}>You are out of time!</Text>
+                        ) : (
+                            <Text style={styles.endGameCardText}>You are out of attempts!</Text>
+                        )}
+                        <Image
+                            source={require('./images.jpeg')}
+                            style={styles.emojiImage}
+                        />
+                        <Button title="New Game" onPress={handleStart} />
+                    </View>
+                    ) :
+                        !showFeedback ? (
+                            <View style={styles.guessingCard}>
+                                <Text style={styles.instructions}>Guess a number between 1 & 100 that is a multiple of {lastDigit}</Text>
+                                {!gameStarted ? (
+                                    <Button title="Start Game" onPress={handleStart} />
+                                ) : (
+                                    <>
+                                        <TextInput
+                                            style={styles.input}
+                                            onChangeText={setGuess}
+                                            placeholder="Enter your guess"
+                                            value={guess}
+                                            keyboardType="numeric"
+                                        />
+                                        <Text>Attempts left: {attempts}</Text>
+                                        <Text>Timer: {timer}s</Text>
+                                        {hintMessage && <Text style={styles.hintMessage}>{hintMessage}</Text>}
+                                        <Button title="Use a Hint" onPress={handleHint} disabled={hintUsed} />
+                                        <Button title="Submit guess" onPress={handleGuess} disabled={attempts <= 0} />
+                                    </>
+                                )}
+                            </View>
+                        ) : (
+                            <View style={styles.feedbackCard}>
+                                <Text>{feedback}</Text>
+                                <Button title="Try Again" onPress={() => setShowFeedback(false)} />
+                                <Button title="End the Game" onPress={handleEndGame} />
+                            </View>
+                        )}
                 </View>
             </View>
         </GradientBackground>
@@ -207,6 +193,11 @@ const styles = StyleSheet.create({
 
     },
 
+    endGameCardText: {
+        color: 'lightblue',
+        marginBottom: 10,
+        fontSize: 15,
+    },
     endGameCard: {
         backgroundColor: 'black',
         padding: 20,
@@ -221,7 +212,7 @@ const styles = StyleSheet.create({
     },
 
 
-    card: {
+    guessingCard: {
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
@@ -261,7 +252,7 @@ const styles = StyleSheet.create({
 
     restartButton: {
         position: 'absolute',
-        top: 300,
+        top: 210,
         right: '10%',
         padding: 10,
         backgroundColor: '#ddd',
