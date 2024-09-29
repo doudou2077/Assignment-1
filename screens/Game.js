@@ -39,12 +39,12 @@ const Game = ({ lastDigit, onRestart }) => {
     const handleStart = () => {
         setGameStarted(true);
         setHasWon(false);
-        setTotalAttemptsUsed(0);  // Reset the total attempts used
-        setAttempts(4);           // Reset attempts
-        setTimer(60);             // Reset timer
-        setShowFeedback(false);   // Hide feedback
-        setHintUsed(false);       // Reset hint usage
-        setHintMessage('');       // Clear hint message
+        setTotalAttemptsUsed(0);
+        setAttempts(4);
+        setTimer(60);
+        setShowFeedback(false);
+        setHintUsed(false);
+        setHintMessage('');
         setEndReason('');
         const newAnswer = generateCorrectAnswer(lastDigit);
         setCorrectAnswer(newAnswer);
@@ -65,7 +65,7 @@ const Game = ({ lastDigit, onRestart }) => {
             if (numericGuess === correctAnswer) {
                 setHasWon(true);
                 setFeedback(`Congratulations! Your guessed the number in ${totalAttemptsUsed + 1} attempts.`);
-                setShowFeedback(true); // Optionally show feedback here if you want
+                setShowFeedback(true);
             } else {
                 setAttempts(prev => prev - 1);
                 if (attempts <= 1) {
@@ -114,8 +114,9 @@ const Game = ({ lastDigit, onRestart }) => {
                             <Button title="New Game" onPress={handleStart} />
                         </View>
                     ) : endReason ? (<View style={styles.endGameCard}>
+                        <Text style={styles.endGameTitle}>The game is over</Text>
                         {endReason === 'manual' ? (
-                            <Text style={styles.endGameCardText}>The game is over</Text>
+                            <Text style={styles.endGameCardText}>You ended the game</Text>
                         ) : endReason === 'time' ? (
                             <Text style={styles.endGameCardText}>You are out of time!</Text>
                         ) : (
@@ -194,12 +195,12 @@ const styles = StyleSheet.create({
     },
 
     endGameCardText: {
-        color: 'lightblue',
+        color: 'grey',
         marginBottom: 10,
         fontSize: 15,
     },
     endGameCard: {
-        backgroundColor: 'black',
+        backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
         width: '80%',
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     feedbackCard: {
-        backgroundColor: 'lightgrey',
+        backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
         width: '80%',
