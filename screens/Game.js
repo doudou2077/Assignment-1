@@ -82,7 +82,7 @@ const Game = ({ lastDigit, onRestart }) => {
 
     const handleHint = () => {
         if (!hintUsed && guess) {
-            const direction = parseInt(guess, 10) > correctAnswer ? 'Guess lower!' : 'Guess higher!';
+            const direction = correctAnswer > 50 ? 'The number is between 50-100' : 'The number is between 2-50';
             setHintMessage(direction);
             setHintUsed(true); // Disables further use of the hint
         }
@@ -115,17 +115,17 @@ const Game = ({ lastDigit, onRestart }) => {
                         </View>
                     ) : endReason ? (<View style={styles.endGameCard}>
                         <Text style={styles.endGameTitle}>The game is over</Text>
+                        <Image
+                            source={require('./images.jpeg')}
+                            style={styles.emojiImage}
+                        />
                         {endReason === 'manual' ? (
-                            <Text style={styles.endGameCardText}>You ended the game</Text>
+                            <Text style={styles.endGameCardText}></Text>
                         ) : endReason === 'time' ? (
                             <Text style={styles.endGameCardText}>You are out of time!</Text>
                         ) : (
                             <Text style={styles.endGameCardText}>You are out of attempts!</Text>
                         )}
-                        <Image
-                            source={require('./images.jpeg')}
-                            style={styles.emojiImage}
-                        />
                         <Button title="New Game" onPress={handleStart} />
                     </View>
                     ) :
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     },
 
     winGameCard: {
-        backgroundColor: '#99ccff',
+        backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
         width: '80%',
